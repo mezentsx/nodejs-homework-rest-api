@@ -21,7 +21,7 @@ const contactSchema = Schema({
     ref: "user",
     required: true,
   },
-});
+}, { versionKey: false, timestamps: true } );
 
 const joiContactSchema = Joi.object({
   name: Joi.string().alphanum().min(3).max(30).required(),

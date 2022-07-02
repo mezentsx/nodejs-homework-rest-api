@@ -1,5 +1,5 @@
 const express = require("express");
-const { auth, ctrlWrapper, validation } = require("../../middlewares/index");
+const { auth, ctrlWrapper, validation, upload } = require("../../middlewares/index");
 const {
   joiUserSchema,
   joiLoginSchema
@@ -8,7 +8,8 @@ const {
     signup,
     login,
     getCurrent,
-    logout
+    logout,
+    updateAvatar
 } = require("../../controllers/users/index");
 
 const router = express.Router();
@@ -20,5 +21,7 @@ router.post("/login", validation(joiLoginSchema), ctrlWrapper(login));
 router.get("/current", auth, ctrlWrapper(getCurrent));
 
 router.get("/logout", auth, ctrlWrapper(logout));
+
+router.patch("/avatars", auth, upload.single("avatar"), ctrlWrapper(updateAvatar));
 
 module.exports = router;
