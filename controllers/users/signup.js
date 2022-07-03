@@ -1,6 +1,7 @@
-const { User } = require("../../models");
-const { createError } = require("../../helpers");
+const { User } = require("../../models/index");
+const { createError, sendEmail } = require("../../helpers/index");
 const gravatar = require("gravatar");
+const { generate } = require('shortid');
 
 const signup = async (req, res) => {
   const { name, email, password, subscription } = req.body;
@@ -8,11 +9,14 @@ const signup = async (req, res) => {
   if (user) {
     throw createError( 409, `User with "${email}" is already registered`);
   }
-  const avatarURL = gravatar.url(email);
   
-  const newUser = new User({ name, email, subscription, avatarURL });
+  const avatarURL = gravatar.url(email);
+  const verificationToken = generate();
+
+  const newUser = new User({ name, email, subscription, avatarURL, verificationToken });
   newUser.setPassword(password);
-  newUser.save();
+  await newUser.save();
+  sendEmail(newUser);
 
   res.status(201).json({
     status: "success",
@@ -23,6 +27,7 @@ const signup = async (req, res) => {
         email,
         subscription,
         avatarURL,
+        verificationToken
       },
     },
   });

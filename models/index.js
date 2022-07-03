@@ -2,13 +2,14 @@ const {
     Contact, 
     contactSchema,
     joiContactSchema,
-    joiStatusSchema 
+    joiStatusSchema
   } = require("./contact");
 
   const {
     User,
     joiUserSchema,
     joiLoginSchema,
+    verifyEmailSchema
   } = require("./user");
   
   module.exports = {
@@ -19,4 +20,5 @@ const {
     User,
     joiUserSchema,
     joiLoginSchema,
+    verifyEmailSchema
   };
